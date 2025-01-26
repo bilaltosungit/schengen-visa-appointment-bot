@@ -31,8 +31,8 @@ const THEME_COLORS = {
     primary: '#818CF8',
     messageBg: 'linear-gradient(135deg, #1E293B 0%, #1F2937 100%)',
     messageText: '#F7FAFC',
-    messageTime: '#9CA3AF',
-    messageLink: '#818CF8',
+    messageTime: '#A0AEC0',
+    messageLink: '#90CDF4',
     messageBorder: '#374151'
   }
 };
@@ -93,23 +93,69 @@ export default function ThemeToggle() {
       .forEach(el => {
         el.style.setProperty('background-image', colors.messageBg);
         el.style.setProperty('border-color', colors.messageBorder);
-        el.style.setProperty('color', colors.messageText);
+        el.style.setProperty('color', colors.messageText, 'important');
         el.style.setProperty('box-shadow', dark ? '0 2px 4px rgba(0, 0, 0, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)');
+        
+        // Mesaj içeriğindeki tüm text elementleri için renk ayarı
+        el.querySelectorAll('.message-content *')
+          .forEach(child => {
+            if (child.tagName !== 'A') { // Link olmayan elementler için
+              child.style.setProperty('color', colors.messageText, 'important');
+            }
+          });
       });
 
     document.querySelectorAll('.message-time')
       .forEach(el => {
-        el.style.setProperty('color', colors.messageTime);
+        el.style.setProperty('color', colors.messageTime, 'important');
       });
 
     document.querySelectorAll('.message-content a')
       .forEach(el => {
-        el.style.setProperty('color', colors.messageLink);
+        el.style.setProperty('color', colors.messageLink, 'important');
       });
     
     // Arka plan
     document.body.style.setProperty('background-image', colors.background);
     document.body.style.setProperty('color', colors.text);
+
+    // Yeni eklenen mesajları izle ve stilleri uygula
+    const messageHistory = document.querySelector('.message-history');
+    if (messageHistory) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach(mutation => {
+          mutation.addedNodes.forEach(node => {
+            if (node.classList?.contains('message')) {
+              // Yeni eklenen mesaja stilleri uygula
+              node.style.setProperty('background-image', colors.messageBg);
+              node.style.setProperty('border-color', colors.messageBorder);
+              node.style.setProperty('color', colors.messageText, 'important');
+              node.style.setProperty('box-shadow', dark ? '0 2px 4px rgba(0, 0, 0, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)');
+
+              // Mesaj zamanı
+              const timeElement = node.querySelector('.message-time');
+              if (timeElement) {
+                timeElement.style.setProperty('color', colors.messageTime);
+              }
+
+              // Mesaj içeriği ve linkler
+              const contentElement = node.querySelector('.message-content');
+              if (contentElement) {
+                contentElement.style.setProperty('color', colors.messageText, 'important');
+                contentElement.querySelectorAll('a').forEach(link => {
+                  link.style.setProperty('color', colors.messageLink);
+                });
+              }
+            }
+          });
+        });
+      });
+
+      observer.observe(messageHistory, {
+        childList: true,
+        subtree: true
+      });
+    }
   };
 
   useEffect(() => {
@@ -139,12 +185,15 @@ export default function ThemeToggle() {
 
     // System theme değişikliğini dinle
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', (e) => {
+    const handleChange = (e) => {
       if (!localStorage.getItem('theme')) {
         setIsDarkMode(e.matches);
         applyTheme(e.matches);
       }
-    });
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   const toggleTheme = () => {
