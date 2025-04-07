@@ -45,7 +45,7 @@ export default function Home() {
 
   const sendTelegramMessage = useCallback(
     async (message) => {
-      if (!useTelegram) return;
+      if (!useTelegram || message === null) return;
 
       try {
         const response = await fetch(
