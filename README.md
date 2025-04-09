@@ -1,5 +1,9 @@
 # 🌍 Schengen Vizesi Randevu Takip Uygulaması
 
+ ⚠️ ⚠️ ⚠️ BOT BU ARALAR KULLANIM DIŞIDIR ⚠️ ⚠️ ⚠️
+ 🔊🔊🔊   Bot'un kullandığı ücretsiz vfs global servisi dönem dönem yanıt vermemektedir bu yüzden de bot çalışmamaktadır.
+            Servis kullanıma açıldığında buradan güncelleme yaparım.
+
 Modern web arayüzlü ve terminal tabanlı, gerçek zamanlı bildirim sistemine sahip Schengen vize randevu kontrol uygulaması.
 
 ## 🚀 Özellikler
