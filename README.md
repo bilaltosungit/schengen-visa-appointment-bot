@@ -59,8 +59,8 @@ Modern web arayüzlü ve terminal tabanlı, gerçek zamanlı bildirim sistemine 
 
 2. Projeyi indirin ve web arayüzünü başlatın:
    ```bash
-   git clone https://github.com/KULLANICI_ADI/REPO_ADI.git
-   cd REPO_ADI
+   git clone https://github.com/bilaltosungit/schengen-visa-appointment-bot.git
+   cd schengen-visa-appointment-bot
    npm install
    npm run dev
    ```
